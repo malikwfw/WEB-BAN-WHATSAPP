@@ -232,16 +232,31 @@
             border: 1px solid #c3e6cb;
         }
         
-        .timer {
-            background: #fff3cd;
-            color: #856404;
-            padding: 12px;
-            border-radius: 10px;
-            margin: 15px 0;
-            font-weight: bold;
-            border: 1px solid #ffeaa7;
-            font-size: 18px;
-        }
+/* تنسيق العداد القديم (كما هو مع تعديلات بسيطة للتحسين) */
+.timer {
+    background: #fff3cd;
+    color: #856404;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 10px 0; /* قللت الهامش شوية */
+    font-weight: bold;
+    border: 1px solid #ffeaa7;
+    font-size: 18px;
+    text-align: center; /* لضمان توسيط النص */
+}
+
+/* تنسيق ساعة القاهرة الجديدة (بنفس روح العداد عشان الشكل يكمل) */
+.current-time {
+    background: #e1f5fe; /* لون أزرق هادي لتمييزها عن العداد */
+    color: #01579b;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px 0;
+    font-weight: bold;
+    border: 1px solid #b3e5fc;
+    font-size: 16px;
+    text-align: center;
+}
         
         .user-count {
             color: #666;
@@ -383,12 +398,14 @@
             <div class="prize-amount">Rp 5.000.000</div>
             <p>Masukkan nomor telepon Anda untuk klaim hadiah</p>
             
-<div class="timer" style="direction: rtl; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px solid #ddd;">
-    <span style="font-size: 1.2rem; color: #333;">⏰ الوقت المتبقي حتى 10:00 PM:</span>
-    <br>
-    <span id="countdown" style="font-size: 2rem; font-weight: bold; color: #FF0000; letter-spacing: 2px;">00:00:00</span>
+<div class="timer-container">
+    <div class="timer">
+        ⏰ الوقت المتبقي: <span id="countdown">15:00</span>
+    </div>
+    <div class="current-time">
+        🕒 توقيت القاهرة: <span id="egypt-clock">00:00:00</span>
+    </div>
 </div>
-            
             <div class="bonus-offer">
                 <p>🎉 BONUS: Dapatkan tambahan Rp 500.000 jika klaim dalam 5 menit!</p>
             </div>
@@ -498,61 +515,51 @@
             element.innerHTML = message;
         }
 
-// تحديد وقت الانتهاء المستهدف (الساعة 10 مساءً بتوقيت مصر)
-const targetTime = new Date();
-// في البرمجة نظام 24 ساعة: الساعة 10 مساءً هي (22)
-targetTime.setHours(22, 0, 0, 0); 
-
-function updateCountdown() {
-    const countdownElement = document.getElementById('countdown');
+// وظيفة تحديث ساعة القاهرة
+function updateEgyptClock() {
+    const clockElement = document.getElementById('egypt-clock');
     
-    // 1. الحصول على الوقت الحالي في مصر (بصيغة واضحة للمقارنة)
+    // الحصول على الوقت الحالي بتوقيت القاهرة
+    const options = {
+        timeZone: 'Africa/Cairo',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true // نظام 12 ساعة
+    };
+    
     const now = new Date();
-    const egyptTimeStr = now.toLocaleString("en-US", {timeZone: "Africa/Cairo"});
-    const egyptTime = new Date(egyptTimeStr);
+    // تحويل الوقت لنص عربي بتنسيق مصري
+    const timeString = now.toLocaleTimeString('ar-EG', options);
     
-    // 2. حساب الفرق بالملي ثانية
-    let diff = targetTime - egyptTime;
+    clockElement.textContent = timeString;
+}
+
+// تشغيل الساعة وتحديثها كل ثانية
+setInterval(updateEgyptClock, 1000);
+updateEgyptClock();
+
+// --- كود العداد التنازلي الخاص بك (كما هو مع تعديل بسيط للغة) ---
+function updateCountdown() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     
-    // إذا كان وقت الانتهاء قد مضى اليوم، نضبطه ليكون 10 مساءً "غداً"
-    if (diff < 0) {
-        targetTime.setDate(targetTime.getDate() + 1);
-        diff = targetTime - egyptTime;
-    }
-
-    if (diff > 0) {
-        const totalSeconds = Math.floor(diff / 1000);
-        
-        // تحويل الفرق لساعات ودقائق وثواني
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-
-        // عرض العداد (ساعة:دقيقة:ثانية)
-        countdownElement.textContent = 
-            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
-        // تغيير اللون للأحمر إذا بقي أقل من 5 دقائق (300 ثانية)
-        if (totalSeconds < 300) {
-            countdownElement.style.color = "#FF0000"; // الكود الأحمر الذي طلبته
+    if (timeLeft > 0) {
+        timeLeft--;
+        if (timeLeft < 300) {
+            countdownElement.style.color = "#e74c3c";
             countdownElement.style.fontWeight = "bold";
-        } else {
-            countdownElement.style.color = "inherit"; // اللون الطبيعي
         }
     } else {
-        // الإجراءات عند انتهاء الوقت
-        countdownElement.textContent = "00:00:00";
+        countdownElement.textContent = "00:00";
         countdownElement.style.color = "red";
         document.getElementById('claimForm').style.opacity = "0.6";
-        const claimBtn = document.querySelector('.claim-button');
-        if(claimBtn) {
-            claimBtn.disabled = true;
-            claimBtn.textContent = "⏰ انتهى الوقت (10:00 PM)";
-        }
+        document.querySelector('.claim-button').disabled = true;
+        document.querySelector('.claim-button').textContent = "⏰ انتهى الوقت";
     }
 }
 
-// تحديث العداد كل ثانية
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
