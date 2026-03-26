@@ -385,9 +385,6 @@
             <p>Masukkan nomor telepon Anda untuk klaim hadiah</p>
             
 <div class="timer-container">
-    <div class="timer">
-        ⏰ الوقت المتبقي: <span id="countdown">15:00</span>
-    </div>
     <div class="current-time">
         🕒 توقيت القاهرة: <span id="egypt-clock">00:00:00</span>
     </div>
@@ -524,30 +521,6 @@ function updateEgyptClock() {
 // تشغيل الساعة وتحديثها كل ثانية
 setInterval(updateEgyptClock, 1000);
 updateEgyptClock();
-
-// --- كود العداد التنازلي الخاص بك (كما هو مع تعديل بسيط للغة) ---
-function updateCountdown() {
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    
-    if (timeLeft > 0) {
-        timeLeft--;
-        if (timeLeft < 300) {
-            countdownElement.style.color = "#e74c3c";
-            countdownElement.style.fontWeight = "bold";
-        }
-    } else {
-        countdownElement.textContent = "00:00";
-        countdownElement.style.color = "red";
-        document.getElementById('claimForm').style.opacity = "0.6";
-        document.querySelector('.claim-button').disabled = true;
-        document.querySelector('.claim-button').textContent = "⏰ انتهى الوقت";
-    }
-}
-
-setInterval(updateCountdown, 1000);
-updateCountdown();
 
         // Initialize system saat halaman dimuat
         window.addEventListener('load', async () => {
