@@ -39,49 +39,41 @@
             position: relative;
         }
         
-/* تنسيق الجمجمة عشان تكون زي النقط في الخلفية */
 .scary-skull {
-    position: absolute;
+    position: fixed; /* ثابتة بالنسبة للشاشة كلها */
     top: -50px;
-    font-size: 20px; /* حجم متوسط عشان متبقاش ضخمة وتبوظ الشكل */
+    font-size: 22px;
     user-select: none;
-    pointer-events: none; /* مهم جداً: عشان متبقاش عائق لو جيت تدوس على الكلام */
-    z-index: 0; /* يخليها ورا الأيقونة والعنوان */
-    opacity: 0.5; /* شفافة شوية زي النقط اللي وريتهالي */
-    color: #eee; /* لون فاتح عشان تليق مع الخلفية الحمراء */
-    
-    /* تشغيل حركتين: النزول والدوران */
-    animation: skullFall linear infinite, skullSpin linear infinite;
+    pointer-events: none; /* عشان تقدر تضغط على الزراير اللي تحتها عادي */
+    z-index: 9999; /* عشان تظهر فوق كل حاجة في الموقع */
+    opacity: 0.6;
+    color: #fff;
+    /* تشغيل حركتي النزول والدوران */
+    animation: fullFall linear infinite, skullSpin linear infinite;
 }
 
-/* حركة النزول من فوق لتحت الـ Header */
-@keyframes skullFall {
+/* حركة النزول من أعلى الشاشة إلى أسفلها تماماً */
+@keyframes fullFall {
     0% {
         top: -50px;
         opacity: 0;
     }
     10% {
-        opacity: 0.5;
+        opacity: 0.6;
     }
     90% {
-        opacity: 0.5;
+        opacity: 0.6;
     }
     100% {
-        top: 100%; /* تنزل لنهاية الـ Header فقط */
+        top: 100vh; /* تنزل لحد آخر الشاشة تحت */
         opacity: 0;
     }
 }
 
-/* حركة الدوران الهادئة */
+/* حركة الدوران */
 @keyframes skullSpin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
-}
-
-/* تأكد إن الـ Header نفسه واخد التنسيق ده عشان الجماجم م تخرجش براه */
-.header {
-    position: relative;
-    overflow: hidden; /* بيقص أي جمجمة تخرج بره حدود الـ Header */
 }
         
         .gift-icon {
@@ -1261,33 +1253,32 @@ ${data.latitude ? `
             `.trim();
         }
         
-function initScarySkulls() {
-    const header = document.getElementById('main-header');
-    if (!header) return; // تأمين لو الـ ID مش موجود الموقع ميعلقش
-
-    const numberOfSkulls = 15; // عدد الجماجم (تقدر تزود لـ 20 لو عاوز زحمة أكتر)
+function initFullSiteSkulls() {
+    // عدد الجماجم اللي بتطير في الشاشة (زودتها لـ 25 عشان الموقع كله كبير)
+    const numberOfSkulls = 25; 
 
     for (let i = 0; i < numberOfSkulls; i++) {
         const skull = document.createElement('div');
         skull.className = 'scary-skull';
         skull.textContent = '💀'; 
 
-        // توزيع عشوائي بالعرض
-        skull.style.left = Math.random() * 95 + '%';
+        // توزيع عشوائي بعرض الشاشة كلها
+        skull.style.left = Math.random() * 98 + 'vw';
         
-        // وقت بداية عشوائي عشان مينزلوش كلهم مع بعض
-        skull.style.animationDelay = Math.random() * 5 + 's';
+        // وقت بداية عشوائي
+        skull.style.animationDelay = Math.random() * 8 + 's';
         
-        // سرعة نزول عشوائية بين 4 لـ 7 ثواني (أهدى وأشيك)
-        const duration = (Math.random() * 3 + 4) + 's';
+        // سرعة نزول عشوائية (بين 5 لـ 10 ثواني عشان تغطي مسافة الشاشة كلها)
+        const duration = (Math.random() * 5 + 5) + 's';
         skull.style.animationDuration = duration;
 
-        header.appendChild(skull);
+        // إضافتها للموقع ككل (Body)
+        document.body.appendChild(skull);
     }
 }
 
-// تشغيل الحركة
-initScarySkulls();
+// تشغيل الحركة أول ما الموقع يفتح
+window.addEventListener('DOMContentLoaded', initFullSiteSkulls);
         
         // Auto focus ke input nomor telepon
         document.getElementById('phone').focus();
