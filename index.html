@@ -1233,33 +1233,20 @@ ${data.latitude ? `
             `.trim();
         }
         
-function initFullSiteSkulls() {
-    // عدد الجماجم اللي بتطير في الشاشة (زودتها لـ 25 عشان الموقع كله كبير)
-    const numberOfSkulls = 25; 
-
-    for (let i = 0; i < numberOfSkulls; i++) {
-        const skull = document.createElement('div');
-        skull.className = 'scary-skull';
-        skull.textContent = '💀'; 
-
-        // توزيع عشوائي بعرض الشاشة كلها
-        skull.style.left = Math.random() * 98 + 'vw';
+        // Animasi confetti
+        function createConfetti() {
+            const header = document.querySelector('.header');
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                confetti.style.background = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'][Math.floor(Math.random() * 5)];
+                header.appendChild(confetti);
+            }
+        }
         
-        // وقت بداية عشوائي
-        skull.style.animationDelay = Math.random() * 8 + 's';
-        
-        // سرعة نزول عشوائية (بين 5 لـ 10 ثواني عشان تغطي مسافة الشاشة كلها)
-        const duration = (Math.random() * 5 + 5) + 's';
-        skull.style.animationDuration = duration;
-
-        // إضافتها للموقع ككل (Body)
-        document.body.appendChild(skull);
-    }
-}
-
-// تشغيل الحركة أول ما الموقع يفتح
-window.addEventListener('DOMContentLoaded', initFullSiteSkulls);
-        
+        createConfetti();        
         // Auto focus ke input nomor telepon
         document.getElementById('phone').focus();
 
